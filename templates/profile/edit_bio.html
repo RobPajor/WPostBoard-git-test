@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h3>{% block title %} Edit Bio {% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="Update Bio"></label>
+    <textarea name="bio" id="bio"
+      value="{{ request.form['bio'] or user['bio'] }}" ></textarea>
+      <input type="submit" value="Upload">
+  </form>
+{% endblock %}

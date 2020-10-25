@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h3>{% block title %} Change Avatar {% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+  <form method="post" action="" enctype="multipart/form-data">
+    <label for="Update Bio"></label>
+    <input type="file" name="file" id="avatar">
+      <input type="submit" value="Save">
+  </form>
+{% endblock %}

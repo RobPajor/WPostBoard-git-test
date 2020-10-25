@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block header %}
+
+<table>
+	<tr valign="bottom">
+		<td><img src=https://iupac.org/wp-content/uploads/2018/05/default-avatar.png width="50" height="50"> </td>
+	</tr>
+</table>
+
+<h1>{% block title %}Profile of {{user['username']}} {% endblock %}</h1>
+
+{% block joindate %}Joined on {{ user["joindate"].strftime("%Y-%m-%d") }} {% endblock %}</h1>
+
+{% endblock %}
+
+{% block bio%} <h3>User Bio</h3>
+
+{% if user["bio"] != None %}
+{{user["bio"]}}
+{% endif %}
+<p></p>
+{% if g.user["id"] == user['id'] %}
+<button onclick = "window.location.href='{{ url_for("profile.edit_bio", userid=user["id"]) }}'"> Edit Bio </button>
+<button onclick = "window.location.href='{{ url_for("profile.change_avatar", userid=user["id"]) }}'"> Change Avatar </button>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>{% block contentTitle %}User Posts{% endblock %}</h2>
+	
+	
+<article class="post">
+
+    {% for post in posts %}
+	  <header>
+	  <div>
+		  <h3>{{ post["title"] }}</h3>
+		  <div class="about">Posted on {{ post["created"].strftime("%Y-%m-%d") }}</div>
+    </div>
+    
+	  {% if g.user["id"] == post["author_id"] %}
+		  <a class="action" href="{{ url_for('blog.update', id=post['id']) }}" >Edit</a>
+    {% endif %}
+    
+	  </header>
+
+	  <p class="body">{{ post["body"] }}</p>
+	  <i class="like">{{ post["likes"] }} Likes</i>
+
+	  {% if check_if_liked(post["id"], g.user["id"]) == None %}
+	  <a href="{{ url_for('blog.likePost', postid=post['id'], userid=g.user['id'], page='profile')}}" method="post">Like</a>
+	  {% else %}
+	  <a href="{{ url_for('blog.likePost', postid=post['id'], userid=g.user['id'], page='profile')}}" method="post">Remove Like</a>
+	  {% endif %}
+
+	  {% if check_if_disliked(post["id"], g.user["id"]) == None %}
+	  <a href="{{ url_for('blog.dislikePost', postid=post['id'], userid=g.user['id'], page='profile') }}" method="post">Dislike</a>
+	  {% else %}
+	  <a href="{{ url_for('blog.dislikePost', postid=post['id'], userid=g.user['id'], page='profile') }}" method="post">Remove Dislike</a>
+	  {% endif %}
+	  {% endfor %}
+
+</article>
+
+{% endblock %}
+
